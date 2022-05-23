@@ -1,0 +1,1844 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%md\n## Overview\n\nThis notebook will show you how to create and query a table or DataFrame that you uploaded to DBFS. [DBFS](https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html) is a Databricks File System that allows you to store data for querying inside of Databricks. This notebook assumes that you have a file already inside of DBFS that you would like to read from.\n\nThis notebook is written in **Python** so the default cell type is Python. However, you can use different languages by using the `%LANGUAGE` syntax. Python, Scala, SQL, and R are all supported.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-09T05:22:14+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h2>Overview</h2>\n<p>This notebook will show you how to create and query a table or DataFrame that you uploaded to DBFS. <a href=\"https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html\">DBFS</a> is a Databricks File System that allows you to store data for querying inside of Databricks. This notebook assumes that you have a file already inside of DBFS that you would like to read from.</p>\n<p>This notebook is written in <strong>Python</strong> so the default cell type is Python. However, you can use different languages by using the <code>%LANGUAGE</code> syntax. Python, Scala, SQL, and R are all supported.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_960534466",
+      "id": "20220509-051950_1667050268",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-09T05:22:15+0000",
+      "dateFinished": "2022-05-09T05:22:15+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:17158"
+    },
+    {
+      "text": "%md\n### To Import Spark SQL and Spark ML Libraries \nTo Import Spark SQL and Spark ML Libraries. It is neccessary to access the functions.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:20:41+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652509232197_486420939",
+      "id": "paragraph_1652509232197_486420939",
+      "dateCreated": "2022-05-14T06:20:32+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20916",
+      "dateFinished": "2022-05-14T06:20:41+0000",
+      "dateStarted": "2022-05-14T06:20:41+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>To Import Spark SQL and Spark ML Libraries</h3>\n<p>To Import Spark SQL and Spark ML Libraries. It is neccessary to access the functions.</p>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\nfrom pyspark.sql.types import *\n\nfrom pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit, CrossValidator\nfrom pyspark.sql import SparkSession\nfrom pyspark.context import SparkContext\n\nfrom pyspark.sql.functions import *\nfrom pyspark.ml.feature import *\nfrom pyspark.ml import *\nfrom pyspark.ml.classification import *\nfrom pyspark.ml.evaluation import *\nfrom pyspark.mllib.evaluation import *",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:48:05+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_1701469527",
+      "id": "20220509-051950_2124110262",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:48:05+0000",
+      "dateFinished": "2022-05-12T06:48:05+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17159"
+    },
+    {
+      "text": "%md\n### To run the code in PySpark CLI\n\nSet the following to True:\n\nPYSPARK_CLI = True",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:19:20+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652509125019_1347492439",
+      "id": "paragraph_1652509125019_1347492439",
+      "dateCreated": "2022-05-14T06:18:45+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20719",
+      "dateFinished": "2022-05-14T06:19:21+0000",
+      "dateStarted": "2022-05-14T06:19:20+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>To run the code in PySpark CLI</h3>\n<p>Set the following to True:</p>\n<p>PYSPARK_CLI = True</p>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\nIS_DB = True # Run the code in Databricks\n\nPYSPARK_CLI = False\nif PYSPARK_CLI:\n    sc = SparkContext.getOrCreate()\n    spark = SparkSession(sc)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:48:08+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_169563158",
+      "id": "20220509-051950_506621371",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:48:08+0000",
+      "dateFinished": "2022-05-12T06:48:08+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17160"
+    },
+    {
+      "text": "%pyspark\neCommerceSchema = StructType([\n  StructField(\"event_time\", TimestampType(), False),\n  StructField(\"event_type\", StringType(), False),\n  StructField(\"product_id\", IntegerType(), False),\n  StructField(\"category_id\", LongType(), False),\n  StructField(\"StringType\", StringType(), False),\n  StructField(\"brand\", StringType(), False),\n  StructField(\"price\", DoubleType(), False),\n  StructField(\"user_id\", IntegerType(), False),\n  StructField(\"user_session\", StringType(), False),\n])",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:27:19+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_686235869",
+      "id": "20220509-051950_438435668",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:48:12+0000",
+      "dateFinished": "2022-05-12T06:48:12+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17161"
+    },
+    {
+      "text": "%md\n### Load Source Data\nThe data for this exercise is provided as a CSV file containing details of e-commerce items and catetegories. The data includes specific characteristics (or *features*) for each item, as well as a *label* column indicating what is the Event Type of each item.\n\nYou will load this data into a DataFrame and display it.\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:29:55+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Load Source Data</h3>\n<p>The data for this exercise is provided as a CSV file containing details of e-commerce items and catetegories. The data includes specific characteristics (or <em>features</em>) for each item, as well as a <em>label</em> column indicating what is the Event Type of each item.</p>\n<p>You will load this data into a DataFrame and display it.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506187816_1058872672",
+      "id": "paragraph_1652506187816_1058872672",
+      "dateCreated": "2022-05-14T05:29:47+0000",
+      "dateStarted": "2022-05-14T05:29:55+0000",
+      "dateFinished": "2022-05-14T05:29:55+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17162"
+    },
+    {
+      "text": "%md\n### Read the csv file from HDFS (Hadoop File System)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:20:19+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652509184558_1726094315",
+      "id": "paragraph_1652509184558_1726094315",
+      "dateCreated": "2022-05-14T06:19:44+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20829",
+      "dateFinished": "2022-05-14T06:20:19+0000",
+      "dateStarted": "2022-05-14T06:20:19+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Read the csv file from HDFS (Hadoop File System)</h3>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\n# File location and type\nfile_location = \"/user/apandey9/5560/2019-Oct_Master.csv\"\nfile_type = \"csv\"\n\n# CSV options\ninfer_schema = \"true\"\nfirst_row_is_header = \"true\"\ndelimiter = \",\"\n\n# The applied options are for CSV files. For other file types, these will be ignored.\ndf = spark.read.format(file_type) \\\n  .option(\"inferSchema\", infer_schema) \\\n  .option(\"header\", first_row_is_header) \\\n  .option(\"sep\", delimiter) \\\n  .load(file_location) \n\ndf = df.withColumnRenamed('# File format is event_time', 'event_time')\ndf = df.filter((col(\"brand\") != \"No value\") & (col(\"category_code\") != \"No value\"))\n\ndf.show()",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:48:51+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\n|          event_time|event_type|product_id|        category_id|       category_code|   brand|  price|  user_id|        user_session|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\n|2019-10-01 00:00:...|      view|   3900821|2053013552326770905|appliances.enviro...|    aqua|   33.2|554748717|9333dfbd-b87a-470...|\n|2019-10-01 00:00:...|      view|   1307067|2053013558920217191|  computers.notebook|  lenovo| 251.74|550050854|7c90fc70-0e80-459...|\n|2019-10-01 00:00:...|      view|   1004237|2053013555631882655|electronics.smart...|   apple|1081.98|535871217|c6bd7419-2748-4c5...|\n|2019-10-01 00:00:...|      view|   1480613|2053013561092866779|   computers.desktop|  pulser| 908.62|512742880|0d0d91c2-c9c2-4e8...|\n|2019-10-01 00:00:...|      view|  28719074|2053013565480109009|  apparel.shoes.keds|   baden| 102.71|520571932|ac1cd4e5-a3ce-422...|\n|2019-10-01 00:00:...|      view|   1004545|2053013555631882655|electronics.smart...|  huawei| 566.01|537918940|406c46ed-90a4-478...|\n|2019-10-01 00:00:...|      view|   2900536|2053013554776244595|appliances.kitche...|elenberg|  51.46|555158050|b5bdd0b3-4ca2-4c5...|\n|2019-10-01 00:00:...|      view|   1005011|2053013555631882655|electronics.smart...| samsung| 900.64|530282093|50a293fb-5940-41b...|\n|2019-10-01 00:00:...|      view|   3900746|2053013552326770905|appliances.enviro...|   haier| 102.38|555444559|98b88fa0-d8fa-4b9...|\n|2019-10-01 00:00:...|      view|  13500240|2053013557099889147|furniture.bedroom...|     brw|  93.18|555446365|7f0062d8-ead0-4e0...|\n|2019-10-01 00:00:...|      view|   1801995|2053013554415534427|electronics.video.tv|   haier| 193.03|537192226|e3151795-c355-4ef...|\n|2019-10-01 00:00:...|      view|  10900029|2053013555069845885|appliances.kitche...|   bosch|  58.95|519528062|901b9e3c-3f8f-414...|\n|2019-10-01 00:00:...|      view|   1306631|2053013558920217191|  computers.notebook|      hp| 580.89|550050854|7c90fc70-0e80-459...|\n|2019-10-01 00:00:...|      view|   1005135|2053013555631882655|electronics.smart...|   apple|1747.79|535871217|c6bd7419-2748-4c5...|\n|2019-10-01 00:00:...|      view|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|\n|2019-10-01 00:00:...|      view|   4803399|2053013554658804075|electronics.audio...|     jbl|  33.21|555428858|8a6afed4-77f8-40c...|\n|2019-10-01 00:00:...|      view|   1480714|2053013561092866779|   computers.desktop|  pulser| 921.49|512742880|0d0d91c2-c9c2-4e8...|\n|2019-10-01 00:00:...|      view|   1004739|2053013555631882655|electronics.smart...|  xiaomi| 197.55|519530528|9882d21f-2c5f-496...|\n|2019-10-01 00:00:...|      view|   6200260|2053013552293216471|appliances.enviro...|   midea|  47.62|538645907|7d9a8784-7b6c-426...|\n|2019-10-01 00:00:...|      view|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1098",
+              "$$hashKey": "object:18131"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1099",
+              "$$hashKey": "object:18132"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1100",
+              "$$hashKey": "object:18133"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_767299635",
+      "id": "20220509-051950_520002050",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:48:51+0000",
+      "dateFinished": "2022-05-12T06:49:20+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17163"
+    },
+    {
+      "text": "%md\n### Converting the string type columns into integer using withColumn",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:15:14+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652508867734_55152649",
+      "id": "paragraph_1652508867734_55152649",
+      "dateCreated": "2022-05-14T06:14:27+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20287",
+      "dateFinished": "2022-05-14T06:15:14+0000",
+      "dateStarted": "2022-05-14T06:15:14+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Converting the string type columns into integer using withColumn</h3>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\ndf = df.withColumn(\"event_type\", when(df.event_type == 'view', 1) \\\n                  .when(df.event_type == 'cart', 2) \\\n                  .when(df.event_type == 'purchase', 3))\ndf.show()",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:48:54+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\n|          event_time|event_type|product_id|        category_id|       category_code|   brand|  price|  user_id|        user_session|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\n|2019-10-01 00:00:...|         1|   3900821|2053013552326770905|appliances.enviro...|    aqua|   33.2|554748717|9333dfbd-b87a-470...|\n|2019-10-01 00:00:...|         1|   1307067|2053013558920217191|  computers.notebook|  lenovo| 251.74|550050854|7c90fc70-0e80-459...|\n|2019-10-01 00:00:...|         1|   1004237|2053013555631882655|electronics.smart...|   apple|1081.98|535871217|c6bd7419-2748-4c5...|\n|2019-10-01 00:00:...|         1|   1480613|2053013561092866779|   computers.desktop|  pulser| 908.62|512742880|0d0d91c2-c9c2-4e8...|\n|2019-10-01 00:00:...|         1|  28719074|2053013565480109009|  apparel.shoes.keds|   baden| 102.71|520571932|ac1cd4e5-a3ce-422...|\n|2019-10-01 00:00:...|         1|   1004545|2053013555631882655|electronics.smart...|  huawei| 566.01|537918940|406c46ed-90a4-478...|\n|2019-10-01 00:00:...|         1|   2900536|2053013554776244595|appliances.kitche...|elenberg|  51.46|555158050|b5bdd0b3-4ca2-4c5...|\n|2019-10-01 00:00:...|         1|   1005011|2053013555631882655|electronics.smart...| samsung| 900.64|530282093|50a293fb-5940-41b...|\n|2019-10-01 00:00:...|         1|   3900746|2053013552326770905|appliances.enviro...|   haier| 102.38|555444559|98b88fa0-d8fa-4b9...|\n|2019-10-01 00:00:...|         1|  13500240|2053013557099889147|furniture.bedroom...|     brw|  93.18|555446365|7f0062d8-ead0-4e0...|\n|2019-10-01 00:00:...|         1|   1801995|2053013554415534427|electronics.video.tv|   haier| 193.03|537192226|e3151795-c355-4ef...|\n|2019-10-01 00:00:...|         1|  10900029|2053013555069845885|appliances.kitche...|   bosch|  58.95|519528062|901b9e3c-3f8f-414...|\n|2019-10-01 00:00:...|         1|   1306631|2053013558920217191|  computers.notebook|      hp| 580.89|550050854|7c90fc70-0e80-459...|\n|2019-10-01 00:00:...|         1|   1005135|2053013555631882655|electronics.smart...|   apple|1747.79|535871217|c6bd7419-2748-4c5...|\n|2019-10-01 00:00:...|         1|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|\n|2019-10-01 00:00:...|         1|   4803399|2053013554658804075|electronics.audio...|     jbl|  33.21|555428858|8a6afed4-77f8-40c...|\n|2019-10-01 00:00:...|         1|   1480714|2053013561092866779|   computers.desktop|  pulser| 921.49|512742880|0d0d91c2-c9c2-4e8...|\n|2019-10-01 00:00:...|         1|   1004739|2053013555631882655|electronics.smart...|  xiaomi| 197.55|519530528|9882d21f-2c5f-496...|\n|2019-10-01 00:00:...|         1|   6200260|2053013552293216471|appliances.enviro...|   midea|  47.62|538645907|7d9a8784-7b6c-426...|\n|2019-10-01 00:00:...|         1|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1101",
+              "$$hashKey": "object:18199"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590662_632124946",
+      "id": "20220509-051950_973874818",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:48:54+0000",
+      "dateFinished": "2022-05-12T06:49:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17164"
+    },
+    {
+      "text": "%md\n### Converting the string type columns into indices using StringIndexer",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:14:30+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652508677487_9623533",
+      "id": "paragraph_1652508677487_9623533",
+      "dateCreated": "2022-05-14T06:11:17+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:19956",
+      "dateFinished": "2022-05-14T06:11:46+0000",
+      "dateStarted": "2022-05-14T06:11:46+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Converting the string type columns into indices using StringIndexer</h3>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\n#Converting String Values into Index Values\nindexer = StringIndexer(inputCol=\"brand\", outputCol=\"brandIndex\")\nindexer1 = StringIndexer(inputCol=\"category_code\", outputCol=\"category_codeIndex\")\ndf = indexer.fit(df).transform(df) \ndf = indexer1.fit(df).transform(df)\ndf.show()",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:30:36+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+----------+------------------+\n|          event_time|event_type|product_id|        category_id|       category_code|   brand|  price|  user_id|        user_session|brandIndex|category_codeIndex|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+----------+------------------+\n|2019-10-01 00:00:...|         1|   3900821|2053013552326770905|appliances.enviro...|    aqua|   33.2|554748717|9333dfbd-b87a-470...|     164.0|              28.0|\n|2019-10-01 00:00:...|         1|   1307067|2053013558920217191|  computers.notebook|  lenovo| 251.74|550050854|7c90fc70-0e80-459...|       7.0|               2.0|\n|2019-10-01 00:00:...|         1|   1004237|2053013555631882655|electronics.smart...|   apple|1081.98|535871217|c6bd7419-2748-4c5...|       1.0|               0.0|\n|2019-10-01 00:00:...|         1|   1480613|2053013561092866779|   computers.desktop|  pulser| 908.62|512742880|0d0d91c2-c9c2-4e8...|      40.0|               9.0|\n|2019-10-01 00:00:...|         1|  28719074|2053013565480109009|  apparel.shoes.keds|   baden| 102.71|520571932|ac1cd4e5-a3ce-422...|      29.0|              10.0|\n|2019-10-01 00:00:...|         1|   1004545|2053013555631882655|electronics.smart...|  huawei| 566.01|537918940|406c46ed-90a4-478...|       3.0|               0.0|\n|2019-10-01 00:00:...|         1|   2900536|2053013554776244595|appliances.kitche...|elenberg|  51.46|555158050|b5bdd0b3-4ca2-4c5...|      15.0|              23.0|\n|2019-10-01 00:00:...|         1|   1005011|2053013555631882655|electronics.smart...| samsung| 900.64|530282093|50a293fb-5940-41b...|       0.0|               0.0|\n|2019-10-01 00:00:...|         1|   3900746|2053013552326770905|appliances.enviro...|   haier| 102.38|555444559|98b88fa0-d8fa-4b9...|      18.0|              28.0|\n|2019-10-01 00:00:...|         1|  13500240|2053013557099889147|furniture.bedroom...|     brw|  93.18|555446365|7f0062d8-ead0-4e0...|      35.0|              21.0|\n|2019-10-01 00:00:...|         1|   1801995|2053013554415534427|electronics.video.tv|   haier| 193.03|537192226|e3151795-c355-4ef...|      18.0|               3.0|\n|2019-10-01 00:00:...|         1|  10900029|2053013555069845885|appliances.kitche...|   bosch|  58.95|519528062|901b9e3c-3f8f-414...|       8.0|              38.0|\n|2019-10-01 00:00:...|         1|   1306631|2053013558920217191|  computers.notebook|      hp| 580.89|550050854|7c90fc70-0e80-459...|       9.0|               2.0|\n|2019-10-01 00:00:...|         1|   1005135|2053013555631882655|electronics.smart...|   apple|1747.79|535871217|c6bd7419-2748-4c5...|       1.0|               0.0|\n|2019-10-01 00:00:...|         1|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|       1.0|               0.0|\n|2019-10-01 00:00:...|         1|   4803399|2053013554658804075|electronics.audio...|     jbl|  33.21|555428858|8a6afed4-77f8-40c...|      32.0|               4.0|\n|2019-10-01 00:00:...|         1|   1480714|2053013561092866779|   computers.desktop|  pulser| 921.49|512742880|0d0d91c2-c9c2-4e8...|      40.0|               9.0|\n|2019-10-01 00:00:...|         1|   1004739|2053013555631882655|electronics.smart...|  xiaomi| 197.55|519530528|9882d21f-2c5f-496...|       2.0|               0.0|\n|2019-10-01 00:00:...|         1|   6200260|2053013552293216471|appliances.enviro...|   midea|  47.62|538645907|7d9a8784-7b6c-426...|      26.0|              29.0|\n|2019-10-01 00:00:...|         1|   1003306|2053013555631882655|electronics.smart...|   apple| 588.77|555446831|6ec635da-ea15-4a5...|       1.0|               0.0|\n+--------------------+----------+----------+-------------------+--------------------+--------+-------+---------+--------------------+----------+------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1102",
+              "$$hashKey": "object:18257"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1103",
+              "$$hashKey": "object:18258"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1104",
+              "$$hashKey": "object:18259"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1105",
+              "$$hashKey": "object:18260"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1106",
+              "$$hashKey": "object:18261"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590670_1239898311",
+      "id": "20220509-051950_503015908",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:49:21+0000",
+      "dateFinished": "2022-05-12T06:50:09+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17165"
+    },
+    {
+      "text": "%pyspark\ndf.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:49:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- event_time: string (nullable = true)\n |-- event_type: integer (nullable = true)\n |-- product_id: integer (nullable = true)\n |-- category_id: long (nullable = true)\n |-- category_code: string (nullable = true)\n |-- brand: string (nullable = true)\n |-- price: double (nullable = true)\n |-- user_id: integer (nullable = true)\n |-- user_session: string (nullable = true)\n |-- brandIndex: double (nullable = false)\n |-- category_codeIndex: double (nullable = false)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1106214978",
+      "id": "20220509-051950_823302436",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:49:22+0000",
+      "dateFinished": "2022-05-12T06:50:09+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17166"
+    },
+    {
+      "text": "%md\n### Create a temporary view of the dataframe \"df\"",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:14:06+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652508798848_1882847441",
+      "id": "paragraph_1652508798848_1882847441",
+      "dateCreated": "2022-05-14T06:13:18+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20130",
+      "dateFinished": "2022-05-14T06:14:06+0000",
+      "dateStarted": "2022-05-14T06:14:06+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Create a temporary view of the dataframe &ldquo;df&rdquo;</h3>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\n# Create a view or table\ntemp_table_name = \"2019-Oct_Master.csv\"\ndf.createOrReplaceTempView(temp_table_name)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:51:00+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_635843777",
+      "id": "20220509-051950_1375618192",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:51:00+0000",
+      "dateFinished": "2022-05-12T06:51:00+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17167"
+    },
+    {
+      "text": "%pyspark\nif PYSPARK_CLI:\n    csv = spark.read.csv('2019-Oct_Master.csv', inferSchema=True, header=True)\nelse:\n    csv = spark.sql(\"SELECT * FROM 2019-Oct_Master.csv\")",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:56:46+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_539488059",
+      "id": "20220509-051950_1586632713",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:51:02+0000",
+      "dateFinished": "2022-05-12T06:51:02+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17168"
+    },
+    {
+      "text": "%md\n### Selecting features\nIn this following step, we are selecting the features that are useful for Event_Type Prediction.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:12:56+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652508745401_164916241",
+      "id": "paragraph_1652508745401_164916241",
+      "dateCreated": "2022-05-14T06:12:25+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:20043",
+      "dateFinished": "2022-05-14T06:12:56+0000",
+      "dateStarted": "2022-05-14T06:12:56+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Selecting features</h3>\n<p>In this following step, we are selecting the features that are useful for Event_Type Prediction.</p>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\ndata = csv.select(\"product_id\", \"brandIndex\", \"category_codeIndex\", \"price\", \"user_id\", col(\"event_type\").alias(\"label\"))",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:51:18+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_559699156",
+      "id": "20220509-051950_409005686",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:51:18+0000",
+      "dateFinished": "2022-05-12T06:51:18+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17169"
+    },
+    {
+      "text": "%md\n### Split the Data\nIt is common practice when building supervised machine learning models to split the source data, using some of it to train the model and reserving some to test the trained model. In this exercise, you will use 70% of the data for training, and reserve 30% for testing.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:31:18+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Split the Data</h3>\n<p>It is common practice when building supervised machine learning models to split the source data, using some of it to train the model and reserving some to test the trained model. In this exercise, you will use 70% of the data for training, and reserve 30% for testing.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506260403_1216112390",
+      "id": "paragraph_1652506260403_1216112390",
+      "dateCreated": "2022-05-14T05:31:00+0000",
+      "dateStarted": "2022-05-14T05:31:18+0000",
+      "dateFinished": "2022-05-14T05:31:18+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17170"
+    },
+    {
+      "text": "%pyspark\n# Split the data\nsplits = data.randomSplit([0.7, 0.3])\ntrain = splits[0]\ntest = splits[1].withColumnRenamed(\"label\", \"trueLabel\")\nprint (\"Training Rows:\", train.count(), \" Testing Rows:\", test.count())",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:51:20+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Training Rows: 18593365  Testing Rows: 7967257\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1107",
+              "$$hashKey": "object:18559"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1108",
+              "$$hashKey": "object:18560"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1109",
+              "$$hashKey": "object:18561"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1110",
+              "$$hashKey": "object:18562"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1263305905",
+      "id": "20220509-051950_1033801703",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:51:20+0000",
+      "dateFinished": "2022-05-12T06:52:40+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17171"
+    },
+    {
+      "text": "%md\r\n## DECISION TREE CLASSIFIER",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:34:57+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h2>DECISION TREE CLASSIFIER</h2>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506490980_835519440",
+      "id": "paragraph_1652506490980_835519440",
+      "dateCreated": "2022-05-14T05:34:50+0000",
+      "dateStarted": "2022-05-14T05:34:57+0000",
+      "dateFinished": "2022-05-14T05:34:57+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17172"
+    },
+    {
+      "text": "%md\r\n### Prepare the Training Data\r\nTo train the regression model, you need a training data set that includes a vector of numeric features, and a label column. In this exercise, you will use the **VectorAssembler** class to transform the feature columns into a vector.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:35:29+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Prepare the Training Data</h3>\n<p>To train the regression model, you need a training data set that includes a vector of numeric features, and a label column. In this exercise, you will use the <strong>VectorAssembler</strong> class to transform the feature columns into a vector.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506500383_325842511",
+      "id": "paragraph_1652506500383_325842511",
+      "dateCreated": "2022-05-14T05:35:00+0000",
+      "dateStarted": "2022-05-14T05:35:29+0000",
+      "dateFinished": "2022-05-14T05:35:29+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17173"
+    },
+    {
+      "text": "%pyspark\nassembler_dt = VectorAssembler(inputCols=[\"product_id\", \"brandIndex\", \"category_codeIndex\", \"price\", \"user_id\" ], outputCol=\"features\")\n\n#lr = LinearRegression(labelCol=\"label\", featuresCol=\"normFeatures\")\ndt = DecisionTreeClassifier(labelCol=\"label\", featuresCol= \"features\", maxBins=3000)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:05:25+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1417673315",
+      "id": "20220509-051950_518493696",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-14T06:05:26+0000",
+      "dateFinished": "2022-05-14T06:06:23+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17174"
+    },
+    {
+      "text": "%md\r\n### Parameter Building and Train using Cross Validator\r\nUsing the CrossValidator to evaluate each combination of parameters which are defined in ParameterGrid against multiple folds, in order to find the best performing parameters. It is used to find the best model for the data. Here the number of folds is assigned to 3.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:21:41+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Parameter Building and Train using Cross Validator</h3>\n<p>Using the CrossValidator to evaluate each combination of parameters which are defined in ParameterGrid against multiple folds, in order to find the best performing parameters. It is used to find the best model for the data. Here the number of folds is assigned to 3.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506542987_2108100775",
+      "id": "paragraph_1652506542987_2108100775",
+      "dateCreated": "2022-05-14T05:35:42+0000",
+      "dateStarted": "2022-05-14T06:21:41+0000",
+      "dateFinished": "2022-05-14T06:21:41+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17175"
+    },
+    {
+      "text": "%pyspark\n# TODO: params refered to the reference above\nparamGrid_cv_dt = ParamGridBuilder() \\\n  .addGrid(dt.maxDepth, [3, 5]) \\\n  .addGrid(dt.minInfoGain, [0.0]) \\\n  .build()",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:51:26+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1003868443",
+      "id": "20220509-051950_1350272901",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:52:40+0000",
+      "dateFinished": "2022-05-12T06:52:40+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17176"
+    },
+    {
+      "text": "%md\n### Building the Pipeline\nDefine a pipeline that creates a feature vector and trains a Decision Tree model",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:16:26+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652508501873_107455884",
+      "id": "paragraph_1652508501873_107455884",
+      "dateCreated": "2022-05-14T06:08:21+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:19819",
+      "dateFinished": "2022-05-14T06:16:26+0000",
+      "dateStarted": "2022-05-14T06:16:26+0000",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Building the Pipeline</h3>\n<p>Define a pipeline that creates a feature vector and trains a Decision Tree model</p>\n"
+          }
+        ]
+      }
+    },
+    {
+      "text": "%pyspark\npipeline_cv_dt = Pipeline(stages=[assembler_dt, dt])\n\nK = 3\ncv_dt = CrossValidator(estimator=pipeline_cv_dt, evaluator=MulticlassClassificationEvaluator(), estimatorParamMaps=paramGrid_cv_dt, numFolds = K)\n\nmodel_cv_dt = cv_dt.fit(train)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:53:34+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1111",
+              "$$hashKey": "object:18844"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1112",
+              "$$hashKey": "object:18845"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1113",
+              "$$hashKey": "object:18846"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1114",
+              "$$hashKey": "object:18847"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1115",
+              "$$hashKey": "object:18848"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1116",
+              "$$hashKey": "object:18849"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1117",
+              "$$hashKey": "object:18850"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1118",
+              "$$hashKey": "object:18851"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1119",
+              "$$hashKey": "object:18852"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1120",
+              "$$hashKey": "object:18853"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1121",
+              "$$hashKey": "object:18854"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1122",
+              "$$hashKey": "object:18855"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1123",
+              "$$hashKey": "object:18856"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1124",
+              "$$hashKey": "object:18857"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1125",
+              "$$hashKey": "object:18858"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1126",
+              "$$hashKey": "object:18859"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1127",
+              "$$hashKey": "object:18860"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1128",
+              "$$hashKey": "object:18861"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1129",
+              "$$hashKey": "object:18862"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1130",
+              "$$hashKey": "object:18863"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1131",
+              "$$hashKey": "object:18864"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1132",
+              "$$hashKey": "object:18865"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1133",
+              "$$hashKey": "object:18866"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1134",
+              "$$hashKey": "object:18867"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1135",
+              "$$hashKey": "object:18868"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1136",
+              "$$hashKey": "object:18869"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1137",
+              "$$hashKey": "object:18870"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1138",
+              "$$hashKey": "object:18871"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1139",
+              "$$hashKey": "object:18872"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1140",
+              "$$hashKey": "object:18873"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1141",
+              "$$hashKey": "object:18874"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1142",
+              "$$hashKey": "object:18875"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1143",
+              "$$hashKey": "object:18876"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1144",
+              "$$hashKey": "object:18877"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1145",
+              "$$hashKey": "object:18878"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1146",
+              "$$hashKey": "object:18879"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1147",
+              "$$hashKey": "object:18880"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1148",
+              "$$hashKey": "object:18881"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1149",
+              "$$hashKey": "object:18882"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1150",
+              "$$hashKey": "object:18883"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1151",
+              "$$hashKey": "object:18884"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1152",
+              "$$hashKey": "object:18885"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1153",
+              "$$hashKey": "object:18886"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1154",
+              "$$hashKey": "object:18887"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1155",
+              "$$hashKey": "object:18888"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1156",
+              "$$hashKey": "object:18889"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1157",
+              "$$hashKey": "object:18890"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1158",
+              "$$hashKey": "object:18891"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1159",
+              "$$hashKey": "object:18892"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1160",
+              "$$hashKey": "object:18893"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1161",
+              "$$hashKey": "object:18894"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1162",
+              "$$hashKey": "object:18895"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1163",
+              "$$hashKey": "object:18896"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1164",
+              "$$hashKey": "object:18897"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1165",
+              "$$hashKey": "object:18898"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1166",
+              "$$hashKey": "object:18899"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1167",
+              "$$hashKey": "object:18900"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1168",
+              "$$hashKey": "object:18901"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1169",
+              "$$hashKey": "object:18902"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1170",
+              "$$hashKey": "object:18903"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1171",
+              "$$hashKey": "object:18904"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1172",
+              "$$hashKey": "object:18905"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1173",
+              "$$hashKey": "object:18906"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1174",
+              "$$hashKey": "object:18907"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1175",
+              "$$hashKey": "object:18908"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1176",
+              "$$hashKey": "object:18909"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1177",
+              "$$hashKey": "object:18910"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1178",
+              "$$hashKey": "object:18911"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_721811728",
+      "id": "20220509-051950_1333248162",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T06:53:35+0000",
+      "dateFinished": "2022-05-12T07:03:48+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17177"
+    },
+    {
+      "text": "%md\r\n### Test the Model\r\nNow you're ready to use the **transform** method of the model to generate some predictions. You can use this approach to predict Event Type where the label is unknown; but in this case you are using the test data which includes a known true label value, so you can compare the predicted event type to the actual event type.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:36:08+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Test the Model</h3>\n<p>Now you're ready to use the <strong>transform</strong> method of the model to generate some predictions. You can use this approach to predict Event Type where the label is unknown; but in this case you are using the test data which includes a known true label value, so you can compare the predicted event type to the actual event type.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506562721_1257557935",
+      "id": "paragraph_1652506562721_1257557935",
+      "dateCreated": "2022-05-14T05:36:02+0000",
+      "dateStarted": "2022-05-14T05:36:08+0000",
+      "dateFinished": "2022-05-14T05:36:08+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17178"
+    },
+    {
+      "text": "%pyspark\nprediction_cv_dt = model_cv_dt.transform(test)\nprediction_cv_dt.select(\"features\", \"prediction\", \"trueLabel\")",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T07:08:34+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "DataFrame[features: vector, prediction: double, trueLabel: int]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1079664888",
+      "id": "20220509-051950_106929948",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T07:08:34+0000",
+      "dateFinished": "2022-05-12T07:08:35+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17179"
+    },
+    {
+      "text": "%md\r\n### Obtaning Accuracy, Test Error, Precision and Recall\r\nUsing the evaluation metrics as Accuracy, Test error, Precision and Recall. The Decision tree classifier model performance is calculated.",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T06:04:53+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>Obtaning Accuracy, Test Error, Precision and Recall</h3>\n<p>Using the evaluation metrics as Accuracy, Test error, Precision and Recall. The Decision tree classifier model performance is calculated.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506589621_733852102",
+      "id": "paragraph_1652506589621_733852102",
+      "dateCreated": "2022-05-14T05:36:29+0000",
+      "dateStarted": "2022-05-14T06:04:53+0000",
+      "dateFinished": "2022-05-14T06:04:53+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17180"
+    },
+    {
+      "text": "%pyspark\nevaluator_cv_dt = MulticlassClassificationEvaluator(labelCol=\"trueLabel\", predictionCol=\"prediction\", metricName=\"accuracy\")\naccuracy_cv_dt = evaluator_cv_dt.evaluate(prediction_cv_dt)\nprint (\"Average Accuracy =\", accuracy_cv_dt)\nprint (\"Test Error = \", (1 - accuracy_cv_dt))\n\nevaluator_cv_dt = MulticlassClassificationEvaluator(labelCol=\"trueLabel\", predictionCol=\"prediction\", metricName=\"weightedPrecision\")\nprecision_cv_dt = evaluator_cv_dt.evaluate(prediction_cv_dt)\nprint (\"Precision =\", precision_cv_dt)\n\nevaluator_cv_dt = MulticlassClassificationEvaluator(labelCol=\"trueLabel\", predictionCol=\"prediction\", metricName=\"weightedRecall\")\nRecall_cv_dt = evaluator_cv_dt.evaluate(prediction_cv_dt)\nprint (\"Recall =\", Recall_cv_dt)",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-12T06:56:57+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionSupport": true,
+          "completionKey": "TAB"
+        },
+        "editorMode": "ace/mode/python",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Average Accuracy = 0.9488104877249472\nTest Error =  0.05118951227505275\nPrecision = 0.9002413416168523\nRecall = 0.9488104877249472\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1179",
+              "$$hashKey": "object:19381"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1180",
+              "$$hashKey": "object:19382"
+            },
+            {
+              "jobUrl": "http://ip-172-30-1-71.us-west-2.compute.internal:4040/jobs/job?id=1181",
+              "$$hashKey": "object:19383"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652073590678_1395110687",
+      "id": "20220509-051950_615140929",
+      "dateCreated": "2022-05-09T05:19:50+0000",
+      "dateStarted": "2022-05-12T07:03:48+0000",
+      "dateFinished": "2022-05-12T07:05:49+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17181"
+    },
+    {
+      "text": "%md\n###References\n\nhttps://towardsdatascience.com/multi-class-text-classification-with-pyspark-7d78d022ed35\n\nhttps://spark.apache.org/docs/latest/ml-classification-regression.html#multilayer-perceptron-classifier\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:37:16+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h3>References</h3>\n<p>https://towardsdatascience.com/multi-class-text-classification-with-pyspark-7d78d022ed35</p>\n<p>https://spark.apache.org/docs/latest/ml-classification-regression.html#multilayer-perceptron-classifier</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652338617546_70922906",
+      "id": "paragraph_1652338617546_70922906",
+      "dateCreated": "2022-05-12T06:56:57+0000",
+      "dateStarted": "2022-05-14T05:37:16+0000",
+      "dateFinished": "2022-05-14T05:37:16+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:17182"
+    },
+    {
+      "text": "%md\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-05-14T05:37:16+0000",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1652506636618_1457644368",
+      "id": "paragraph_1652506636618_1457644368",
+      "dateCreated": "2022-05-14T05:37:16+0000",
+      "status": "READY",
+      "$$hashKey": "object:17183"
+    }
+  ],
+  "name": "Classification",
+  "id": "2H268EXGA",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {
+    "isRunning": false
+  },
+  "path": "/apandey9/Classification"
+}
